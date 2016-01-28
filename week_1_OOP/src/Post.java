@@ -4,4 +4,6 @@ public abstract class Post {
 	private User[] likes;
 	private User[] disLikes;
 	private Comment[] comments;
+	
+	
 }
