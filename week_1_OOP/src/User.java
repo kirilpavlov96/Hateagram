@@ -1,5 +1,6 @@
+import java.util.ArrayList;
 
-public class User {
+public class User implements IUser{
 	private String name;
 	private short age;
 	private String username;
@@ -7,8 +8,8 @@ public class User {
 	private String email;
 	private String sex;
 	private String info;
-	private User[] followers;
-	private User[] following;
+	private ArrayList<IUser> followers;
+	private ArrayList<IUser> following;
 	
 	public User(String name,short age,String username,String password,String email){
 		this.setName(name);
@@ -18,9 +19,15 @@ public class User {
 		this.setEmail(email);
 	}
 	
-	public void addUserToFollow(User user){
-		//da se napravqt followers i following s kolekcii za da se dobavq
-		//po lesno
+	public void addUserToFollow(IUser user){
+		if(user==null) return;
+		this.following.add(user);
+		user.addFollower(user);
+	}
+	
+	public void addFollower(IUser user){
+		if(user==null) return;
+		this.followers.add(user);
 	}
 	
 	public void addInfo(String info){
@@ -33,7 +40,7 @@ public class User {
 			this.name = name;
 		}
 		else{
-			this.name="Unnamed";
+			this.name="Unndamed";
 		}
 	}
 
@@ -47,31 +54,15 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-		//proverka dali username veche ne sushtestvuva
-		if(username!=null){
 			this.username = username;
-		}
-		else{
-			//hvurlq checked exception
-		}
 	}
 
 	public void setPassword(String password) {
-		if(password!=null){
 			this.password = password;
-		}
-		else{
-			//hvurlq checked exception
-		}
 	}
 
 	public void setEmail(String email) {
-		if(email!=null){
 			this.email = email;
-		}
-		else{
-			//hvurlq checked exception
-		}
 	}
 
 	public void setSex(String sex) {
@@ -82,12 +73,16 @@ public class User {
 			this.sex="Female";
 		}
 		else{
-			//hvurlq checked exception
+			this.sex = "Male";
 		}
 	}
 
 	public void setInfo(String info) {
-		this.info = info;
+		if(info==null)
+			this.info="";
+		else{
+			this.info = info;
+		}
 	}
 
 }
