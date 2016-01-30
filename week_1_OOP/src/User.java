@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class User implements IUser{
 	private String name;
-	private short age;
+	private int age;
 	private String username;
 	private String password;
 	private String email;
