@@ -33,7 +33,7 @@ public class User {
 			this.name = name;
 		}
 		else{
-			this.name="Unndamed";
+			this.name="Unnamed";
 		}
 	}
 
