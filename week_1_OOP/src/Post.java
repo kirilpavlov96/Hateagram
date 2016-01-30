@@ -6,10 +6,18 @@ public abstract class Post {
 	private ArrayList<IUser> disLikes;
 	private ArrayList<Comment> comments;
 	
-	public abstract void addComment(Comment comment);
-	public abstract void addLike(IUser user);
-	public abstract void addDisLike(IUser user);
-	public void setPath(String path){
-		//implementation...
+	public Post(String path){
+		this.path=path;
 	}
+	
+	public void addComment(Comment comment){
+		this.comments.add(comment);
+	}
+	public void addLike(IUser user){
+		this.likes.add(user);
+	}
+	public void addDisLike(IUser user){
+		this.disLikes.add(user);
+	}
+
 }
