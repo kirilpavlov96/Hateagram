@@ -1,3 +1,4 @@
+package OOP;
 
 public class Picture extends Post{
 

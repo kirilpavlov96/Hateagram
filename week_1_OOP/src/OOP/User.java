@@ -1,3 +1,4 @@
+package OOP;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -38,10 +39,15 @@ public class User implements IUser {
 //			
 //	}
 	
+	/* (non-Javadoc)
+	 * @see OOP.IUser#CreateComment(java.lang.StringBuilder, OOP.Post)
+	 */
+	@Override
 	public Comment CreateComment(StringBuilder text, Post post) {
 		return new Comment(text, this, post);
 	}
 
+	@Override
 	public void addUserToFollow(IUser user) {
 		if (user == null)
 			return;
@@ -49,13 +55,69 @@ public class User implements IUser {
 		user.addFollower(user);
 	}
 
+	@Override
 	public void addFollower(IUser user) {
 		if (user == null)
 			return;
 		this.followers.add(user);
 	}
 
-	public void addInfo(String info) {
+
+	public String getName() {
+		return name;
+	}
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public LocalDateTime getDateUserCreated() {
+		return dateUserCreated;
+	}
+
+
+	public String getSex() {
+		return sex;
+	}
+
+
+	public StringBuilder getInfo() {
+		return info;
+	}
+
+
+	public ArrayList<IUser> getFollowers() {
+		return followers;
+	}
+
+
+	public ArrayList<IUser> getFollowing() {
+		return following;
+	}
+
+
+	public ArrayList<Post> getPosts() {
+		return posts;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+
+	private void addInfo(String info) {
 		if (info != null) {
 			this.info.append(" " + info);
 		} 
@@ -64,7 +126,8 @@ public class User implements IUser {
 		}
 	}
 
-	public void setName(String name) {
+
+	private void setName(String name) {
 		if (name != null) {
 			this.name = name;
 		} 
@@ -73,7 +136,8 @@ public class User implements IUser {
 		}
 	}
 
-	public void setAge(int age) {
+
+	private void setAge(int age) {
 		if (age <= MAXIMAL_AGE && age >= MINIMAL_AGE) {
 			this.age = age;
 		}
@@ -83,7 +147,8 @@ public class User implements IUser {
 		}
 	}
 
-	public void setUsername(String username) {
+
+	private void setUsername(String username) {
 		if (username != null) {
 			this.username = username;
 		} 
@@ -92,11 +157,13 @@ public class User implements IUser {
 		}
 	}
 
-	public void setPassword(String password) {
+
+	private void setPassword(String password) {
 		this.password = password;
 	}
 
-	public void setEmail(String email) {
+
+	private void setEmail(String email) {
 		if (isValidEmailAddress(email)) {
 			this.email = email;
 		} else {
@@ -104,7 +171,7 @@ public class User implements IUser {
 		}
 	}
 
-	public static boolean isValidEmailAddress(String email) {
+	private static boolean isValidEmailAddress(String email) {
 		boolean stricterFilter = true;
 		String stricterFilterString = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 		String laxString = ".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
@@ -114,7 +181,8 @@ public class User implements IUser {
 		return m.matches();
 	}
 
-	public void setSex(String sex) {
+
+	private void setSex(String sex) {
 		if (sex.equalsIgnoreCase("male")) {
 			this.sex = "Male";
 		} else if (sex.equalsIgnoreCase("female")) {
@@ -124,17 +192,14 @@ public class User implements IUser {
 		}
 	}
 
-	public void setInfo(StringBuilder info) {
+
+	private void setInfo(StringBuilder info) {
 		if (info == null) {
 			System.out.println("Invalid info!");
 			this.info.append("");
 		} else {
 			this.info = info;
 		}
-	}
-
-	String getEmail() {
-		return email;
 	}
 
 }
