@@ -13,7 +13,7 @@ public class MySQLUtil {
 
 	// Database credentials
 	private static final String USER = "root";
-	private static final String PASS = "tupfaceb00k";
+	private static final String PASS = "...";
 
 	private static void openDBConnection(Connection conn, Statement stmt) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
