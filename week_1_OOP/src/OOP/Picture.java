@@ -2,8 +2,8 @@ package OOP;
 
 public class Picture extends Post{
 
-	public Picture(String path){
-		super(path);
+	public Picture(String path,IUser user){
+		super(path,user);
 	}
 
 }
