@@ -6,6 +6,7 @@ public class Comment {
 	private IUser commentator;
 	private Post post;
 	private final LocalDateTime dateAdded;
+	private static long counter=1;
 	
 	public Comment(StringBuilder text,IUser user,Post post){
 		this.setText(text);
@@ -27,10 +28,26 @@ public class Comment {
 		if (commentator!=null)
 		this.commentator = commentator;
 	}
+	
+	public User getCommentator() {
+		return this.commentator.getUsername();
+	}
+	
+	public StringBuilder getText() {
+		return this.text;
+	}
+	
+	public User getPost() {
+		return this.post;
+	}
 
 	private void setPost(Post post) {
 		if(post!=null)
 		this.post = post;
+	}
+	
+	public long getCounter(){
+		return counter++;
 	}
 	
 }

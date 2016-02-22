@@ -164,4 +164,88 @@ public class MySQLUtil {
 		}
 	}
 	
+	public static void addPost(IUser user,Post post) {
+		
+		Connection conn = null;
+		Statement stmt = null;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			// openDBConnection(conn, stmt);
+
+			String sql = "insert into hateagram.post values (?,?,?,?)";
+			st = conn.prepareStatement(sql);
+
+			st.setString(1, post.getCounter());
+			st.setString(2, post.getClass().getSimpleName());
+			st.setString(3, post.getOwner());
+			st.setInt(4, post.getDateAdded());
+	
+
+			System.out.println(st.toString());
+
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+
+	public static void deletePost(Post post) {
+		Connection conn = null;
+		Statement stmt = null;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+
+			String sql = "delete from hateagram.post where ID = ?";
+			st = conn.prepareStatement(sql);
+			st.setString(1, post.getCounter());
+
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+	
+	public static void addNewComment(Comment comment) {
+		
+		Connection conn = null;
+		Statement stmt = null;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			// openDBConnection(conn, stmt);
+
+			String sql = "insert into hateagram.comments values (?,?,?)";
+			st = conn.prepareStatement(sql);
+
+			st.setString(1, comment.getCounter());
+			st.setString(2, comment.getText());
+			st.setString(3, comment.getPost().getCounter());
+			st.setInt(4, comment.getCommentator().getUsername());
+	
+
+			System.out.println(st.toString());
+
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+	
 }
