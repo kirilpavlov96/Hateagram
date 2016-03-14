@@ -17,18 +17,16 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/Index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public Index() {
-        super();
-    }
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session=request.getSession(false);
 		if(session==null || (String)session.getAttribute("username")==null){
-			response.sendRedirect("/Hateagram/html/login.html");
+			request.getRequestDispatcher("/WEB-INF/html/login.html").forward(request, response);
+			//response.sendRedirect("/Hateagram/html/login.html");
 		}
 		else{
-			response.sendRedirect("/Hateagram/html/index.jsp");
+		    request.getRequestDispatcher("/WEB-INF/html/index.jsp").forward(request, response);
+			//response.sendRedirect("/Hateagram/html/index.jsp");
 		}
 	}
 

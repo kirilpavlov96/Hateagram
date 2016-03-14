@@ -44,10 +44,13 @@ public class Login extends HttpServlet {
 			httpSession.setAttribute("posts", MySQLUtil.getAllPosts());
 			
 			
-			response.sendRedirect("/Hateagram/html/index.jsp");
+			//response.sendRedirect("/html/index.jsp");
+			
+			request.getRequestDispatcher("/WEB-INF/html/index.jsp").forward(request, response);
 		}
 		else{
-			response.sendRedirect("/Hateagram/html/login.html");
+//			response.sendRedirect("/html/login.html");
+			request.getRequestDispatcher("/WEB-INF/html/login.html").forward(request, response);
 		}
 	}
 

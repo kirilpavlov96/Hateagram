@@ -7,35 +7,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hateagram.DAO.MySQLUtil;
-import com.hateagram.model.*;
-
-/**
- * Servlet implementation class Register
- */
 @WebServlet("/Register")
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			String username = request.getParameter("username");
-			String name = request.getParameter("name");
-			String age = request.getParameter("age");
-			String password = request.getParameter("password");
-			String email = request.getParameter("email");
-
-			MySQLUtil.registerUser((IUser) (new User(name, Integer.parseInt(age), username, password, email)));
-			response.sendRedirect("/Hateagram/html/login.html");
-			
-		} catch (Exception e) {
-			throw new ServletException("Unable to register user!", e);
-		}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/html/register.html").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 
