@@ -2,8 +2,8 @@ package com.hateagram.model;
 
 public class Picture extends Post{
 
-	public Picture(String path,IUser user){
-		super(path,user);
+	public Picture(int iD, String userID, String postDate, String filename){
+		super(iD, "picture", userID, postDate, filename);
 	}
 
 }

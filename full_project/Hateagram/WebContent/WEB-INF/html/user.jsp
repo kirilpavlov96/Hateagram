@@ -1,5 +1,11 @@
+<%@page import="javax.websocket.Session"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.*"%>
+<%@page import="com.hateagram.model.*"%>
+<%@page import="com.hateagram.DAO.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+ 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,7 +28,6 @@
 					 %>
 				</a> <input id="search" type="text" name="search" placeholder="Search.." />
 				</nav>
-
 			</div>
 		</div>
 
@@ -32,33 +37,39 @@
 			style="clear: both; width: 90%; max-width: 100%; border: 0px solid black; background-color: #fff">
 
 			<div class="galleryUserDetails">
-				<a href="img/img1.jpg"> <img id="img1" src="kiril.jpg"></img>
+				<a href="img/img1.jpg"> <img id="img1" src="img/User.png"></img>
 				</a>
-				<h1 style="float: left">User Nick Name</h1>
+				<h1 style="float: left"><% out.print(request.getParameter("user")); %></h1>
 				<div style="float: right; font-size: 0.8em; line-height: 0.3">
-					<p>Posts:234</p>
-					<p>Followers:2342</p>
-					<p>Following:232</p>
+					<p>Posts:<% out.print(MySQLUtil.getUserPostsCount(request.getParameter("user"))); %></p>
+					<p>Followers:<% out.print(MySQLUtil.getUserFollowersCount(request.getParameter("user"))); %></p>
+					<p>Following:<% out.print(MySQLUtil.getUserFollowingCount(request.getParameter("user"))); %></p>
 				</div>
 				<br />
 
 				<div style="float: left; max-width: 50%">
-					<p>Malko info za men ala bala orisjgnkrenhkrjtnh tlhltknltnlty
-						ltynjltknlktnmlkt lktynmlktmnlktmn tn</p>
+					<p><%
+					IUser user = MySQLUtil.getUser(request.getParameter("user"));
+					out.println("Name: " + user.getRealName() + "<br/>");
+					out.println("Age: " + user.getAge() + "<br/>");
+					out.println("Email: " + user.getEmail() + "<br/>");
+					%></p>
 				</div>
 
 				<a href="#" class="button"
 					style="position: absolute; right: 10px; bottom: 10px;">Follow</a>
 				<p style="clear: both; font-size: 0.6em"></p>
 			</div>
-
+			<%
+				List<Post> l = MySQLUtil.getAllPostsOfUserByDate((String)request.getParameter("user"));
+				for (Post p : l) {
+			%>
 			<div class="galleryPost"
-				style="background-image: url(img/img2.jpg)">
-				<a href="img/img2.jpg">
-					<div class="galleryPostImg"></div>
-				</a>
+				style="background-image: url(<%out.print("img/" + p.getFilename());%>)">
 			</div>
-
+			<%
+			}
+			%>
 		</div>
 
 		<footer class="footer">

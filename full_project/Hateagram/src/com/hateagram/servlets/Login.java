@@ -38,12 +38,6 @@ public class Login extends HttpServlet {
 			HttpSession httpSession= request.getSession(true);
 			httpSession.setAttribute("username", username);
 			httpSession.setMaxInactiveInterval(15*60);
-			
-			//getting all posts
-			System.out.println(MySQLUtil.getAllPosts().size());
-			httpSession.setAttribute("posts", MySQLUtil.getAllPosts());
-			
-			
 			//response.sendRedirect("/html/index.jsp");
 			
 			request.getRequestDispatcher("/WEB-INF/html/index.jsp").forward(request, response);

@@ -13,7 +13,7 @@ public class Profile extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		request.setAttribute("user", request.getParameter("user"));
 		request.getRequestDispatcher("/WEB-INF/html/user.jsp").forward(request, response);
 		
 	}

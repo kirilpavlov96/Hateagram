@@ -26,7 +26,7 @@ public class RegisterUser extends HttpServlet {
 			String password = request.getParameter("password");
 			String email = request.getParameter("email");
 
-			MySQLUtil.registerUser((IUser) (new User(name, Integer.parseInt(age), username, password, email)));
+			MySQLUtil.registerUser((IUser) (new User(username, name, Integer.parseInt(age), password, email)));
 			request.getRequestDispatcher("/Index").forward(request, response);
 			
 		} catch (Exception e) {
