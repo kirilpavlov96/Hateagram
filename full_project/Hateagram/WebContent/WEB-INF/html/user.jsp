@@ -26,7 +26,7 @@
 					<%
  						out.print((String) request.getSession(false).getAttribute("username"));
 					 %>
-				</a> <input id="search" type="text" name="search" placeholder="Search.." />
+				</a>
 				</nav>
 			</div>
 		</div>
@@ -56,8 +56,11 @@
 					%></p>
 				</div>
 
-				<a href="#" class="button"
-					style="position: absolute; right: 10px; bottom: 10px;">Follow</a>
+				<a href=<%out.print("Follow?following=" + request.getParameter("user"));%>
+					class="button"
+					style="position: absolute; right: 10px; bottom: 10px;">
+					Follow
+				</a>
 				<p style="clear: both; font-size: 0.6em"></p>
 			</div>
 			<%
@@ -75,9 +78,8 @@
 		<footer class="footer">
 			<div class="inner-wrapper" style="height: 45px;">
 				<ul class="footer">
-					<li><a href="login.html">Sign in with different account</a></li>
 					<li><a href="http://www.ittalents.bg">It Talents</a></li>
-					<li><a href="about.html">About us</a></li>
+					<li><a href="">About us</a></li>
 				</ul>
 			</div>
 		</footer>

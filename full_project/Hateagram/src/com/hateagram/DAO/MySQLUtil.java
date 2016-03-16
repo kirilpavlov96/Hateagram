@@ -4,8 +4,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.sql.rowset.serial.SerialException;
+
 import com.mysql.jdbc.PreparedStatement;
 import com.sun.corba.se.impl.oa.poa.POACurrent;
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.hateagram.model.*;
 
 public class MySQLUtil {
@@ -104,25 +108,26 @@ public class MySQLUtil {
 		return false;
 	}
 	
-	public static void like(IUser user,Post post){
+	public static void like(String username,int postID){
 		Connection conn = null;
-		Statement stmt = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			stmt = conn.createStatement();
 
-			String sql = "select ID from hateagram.posts where userID = '" + 
-						post.getUserID() + "' and postDate = '" + post.getPostDate()+ "';";
-			
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "select count(ID) from hateagram.likes where User_ID = ? and Post_ID = ? ;";
+			java.sql.PreparedStatement st1 = conn.prepareStatement(sql);
+			st1.setString(1, username);
+			st1.setInt(2, postID);
+			ResultSet rs = st1.executeQuery();
 			rs.next();
-			int postID = rs.getInt("ID");
+			int isLiked = rs.getInt(1);
 			
+			if(isLiked >= 1) return;
+
 			sql = "insert into hateagram.likes (Post_ID,User_ID) values (?,?)";
 			java.sql.PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, postID);
-			st.setString(2, user.getUserName());
+			st.setString(2, username);
 			st.executeUpdate();
 
 		} catch (Exception e) {
@@ -132,25 +137,46 @@ public class MySQLUtil {
 		}
 	}
 	
-	public static void disLike(IUser user,Post post){
+	public static void disLike(String username,int postID){
 		Connection conn = null;
-		Statement stmt = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			stmt = conn.createStatement();
 
-			String sql = "select ID from hateagram.posts where userID = '" + 
-					post.getUserID() + "' and postDate = '" + post.getPostDate()+ "';";
-			
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "select count(ID) from hateagram.dislikes where User_ID = ? and Post_ID = ? ;";
+			java.sql.PreparedStatement st1 = conn.prepareStatement(sql);
+			st1.setString(1, username);
+			st1.setInt(2, postID);
+			ResultSet rs = st1.executeQuery();
 			rs.next();
-			int postID = rs.getInt("ID");
+			int isLiked = rs.getInt(1);
 			
+			if(isLiked >= 1) return;
+
 			sql = "insert into hateagram.dislikes (Post_ID,User_ID) values (?,?)";
 			java.sql.PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, postID);
-			st.setString(2, user.getUserName());
+			st.setString(2, username);
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+	
+	public static void comment(String userID,String comment,int postID){
+		Connection conn = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "insert into hateagram.comments (CommentText,Post_ID,User_ID) values (?,?,?) ;";
+			java.sql.PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, comment);
+			st.setInt(2, postID);
+			st.setString(3, userID);
 			st.executeUpdate();
 
 		} catch (Exception e) {
@@ -359,6 +385,163 @@ public class MySQLUtil {
 		} catch (Exception e) {
 			System.out.println("Gruman we");
 			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+		return result;
+	}
+
+	public static int getPostLikes(Post post){
+		Connection conn = null;
+		int result=0;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "select count(ID) "+
+					"from hateagram.likes "+
+					"where Post_ID = ? ;";
+			
+			st = conn.prepareStatement(sql);
+			st.setInt(1, post.getID());
+			
+			ResultSet rs = st.executeQuery();
+			rs.next();
+			result=rs.getInt(1);
+
+		} catch (Exception e) {
+			System.out.println("Gruman we");
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+		return result;
+	}
+
+	public static int getPostDisLikes(Post post){
+		Connection conn = null;
+		int result=0;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "select count(ID) "+
+					"from hateagram.dislikes "+
+					"where Post_ID = ? ;";
+			
+			st = conn.prepareStatement(sql);
+			st.setInt(1, post.getID());
+			
+			ResultSet rs = st.executeQuery();
+			rs.next();
+			result=rs.getInt(1);
+
+		} catch (Exception e) {
+			System.out.println("Gruman we");
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+		return result;
+	}
+	
+	public static void addNewPicture(Picture pic){
+		Connection conn = null;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "INSERT INTO hateagram.posts (postType,User_ID,filename)"
+						+ " values (?,?,?)";
+			
+			st = conn.prepareStatement(sql);
+			st.setString(1, "1");
+			st.setString(2, pic.getUserID());
+			st.setString(3, pic.getFilename());
+			
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("Gruman we");
+			e.printStackTrace();
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+	
+	public static void addFollowing(String user,String following) throws ServletException{	
+		Connection conn = null;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "insert into hateagram.following (User_ID,Following_ID) "
+						+"values (?,?) ;";
+			
+			st = conn.prepareStatement(sql);
+			st.setString(1, user);
+			st.setString(2, following);
+			
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			throw new ServletException("Unable to add user to follow!",e);
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+	
+	public static void addFollower(String user,String follower) throws ServletException{	
+		Connection conn = null;
+		java.sql.PreparedStatement st = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "insert into hateagram.followers (User_ID,Follower_ID) "
+						+"values (?,?) ;";
+			
+			st = conn.prepareStatement(sql);
+			st.setString(1, user);
+			st.setString(2, follower);
+			
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			throw new ServletException("Unable to add user to follow!",e);
+		} finally {
+			closeDBConnection(conn);
+		}
+	}
+	
+	public static List<IUser> searchForUsers(String key) throws ServletException{
+		Connection conn = null;
+		java.sql.PreparedStatement st = null;
+		List<IUser> result = new ArrayList<IUser>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			String sql = "select * from hateagram.users "
+						+ "where userName like ? "
+						+ "or realName like ? ;";
+			st = conn.prepareStatement(sql);
+			st.setString(1, "%"+key+"%");
+			st.setString(2, "%"+key+"%");
+			
+			ResultSet rs = st.executeQuery();
+			while(rs.next()){
+				System.out.println(rs.getString(1));
+				result.add(new User(rs.getString(1), rs.getString(2),
+							rs.getInt(3), rs.getString(4), rs.getString(5)));
+			}
+
+		} catch (Exception e) {
+			throw new ServletException("Unable to connect to database!",e);
 		} finally {
 			closeDBConnection(conn);
 		}

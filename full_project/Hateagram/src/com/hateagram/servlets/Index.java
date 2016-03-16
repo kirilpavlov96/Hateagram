@@ -22,11 +22,9 @@ public class Index extends HttpServlet {
 		HttpSession session=request.getSession(false);
 		if(session==null || (String)session.getAttribute("username")==null){
 			request.getRequestDispatcher("/WEB-INF/html/login.html").forward(request, response);
-			//response.sendRedirect("/Hateagram/html/login.html");
 		}
 		else{
 		    request.getRequestDispatcher("/WEB-INF/html/index.jsp").forward(request, response);
-			//response.sendRedirect("/Hateagram/html/index.jsp");
 		}
 	}
 
