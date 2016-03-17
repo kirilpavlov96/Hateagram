@@ -7,23 +7,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hateagram.DAO.MySQLUtil;
+import com.hateagram.exceptions.BadLoginException;
 
 /**
- * Servlet implementation class Like
+ * Servlet implementation class About
  */
-@WebServlet("/Like")
-public class Like extends HttpServlet {
+@WebServlet("/About")
+public class About extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		MySQLUtil.like((String)request.getSession(false).getAttribute("username"), Integer.parseInt(request.getParameter("post_ID")));
-		response.sendRedirect("./Index");
+		try{
+			CommonFunctions.isLoggedIn(request);
+			request.getRequestDispatcher("/WEB-INF/html/about.jsp").forward(request, response);
+		}
+		catch(BadLoginException e){
+			response.sendRedirect("./Index");
+		}
 	}
-
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

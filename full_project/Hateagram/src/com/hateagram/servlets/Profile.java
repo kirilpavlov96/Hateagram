@@ -13,8 +13,19 @@ public class Profile extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try{
+		CommonFunctions.isLoggedIn(request);
+		if(request.getParameter("user")==null){
+			throw new ServletException("Ivalid parameters");
+		}
 		request.setAttribute("user", request.getParameter("user"));
 		request.getRequestDispatcher("/WEB-INF/html/user.jsp").forward(request, response);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Invalid user or session");
+			response.sendRedirect("./Index");
+		}
 		
 	}
 

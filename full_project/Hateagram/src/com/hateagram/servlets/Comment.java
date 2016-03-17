@@ -21,7 +21,8 @@ public class Comment extends HttpServlet {
 		
 		MySQLUtil.comment(userID, comment, postID);
 		
-		request.getRequestDispatcher("./Index").forward(request, response);
+
+		response.sendRedirect("./Index");
 	}
 
 }

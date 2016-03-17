@@ -27,10 +27,11 @@ public class RegisterUser extends HttpServlet {
 			String email = request.getParameter("email");
 
 			MySQLUtil.registerUser((IUser) (new User(username, name, Integer.parseInt(age), password, email)));
-			request.getRequestDispatcher("/Index").forward(request, response);
+			response.sendRedirect("./Index");
 			
 		} catch (Exception e) {
-			throw new ServletException("Unable to register user!", e);
+			System.out.println("Unable to register user!");
+			response.sendRedirect("./Index");
 		}
 	}
 

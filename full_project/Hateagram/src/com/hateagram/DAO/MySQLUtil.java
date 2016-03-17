@@ -15,7 +15,7 @@ import com.hateagram.model.*;
 public class MySQLUtil {
 	// JDBC driver name and database URL
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://localhost:3306";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306?autoReconnect=true&useSSL=false";
 
 	// Database credentials
 	private static final String USER = "root";
@@ -48,8 +48,6 @@ public class MySQLUtil {
 			st.setInt(3, user.getAge());
 			st.setString(4, user.getPassword());
 			st.setString(5, user.getEmail());
-
-			System.out.println(st.toString());
 
 			st.executeUpdate();
 
@@ -304,7 +302,6 @@ public class MySQLUtil {
 			
 			ResultSet rs = st.executeQuery();
 			while(rs.next()){
-				System.out.println(rs.toString());
 				if(rs.getString(2).equals("picture")){
 					result.add(new Picture(rs.getInt(1), rs.getString(3), rs.getString(4), rs.getString(5)));
 				}
@@ -314,7 +311,6 @@ public class MySQLUtil {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Gruman we");
 			e.printStackTrace();
 		} finally {
 			closeDBConnection(conn);
@@ -344,7 +340,6 @@ public class MySQLUtil {
 			
 			ResultSet rs = st.executeQuery();
 			while(rs.next()){
-				System.out.println(rs.toString());
 				if(rs.getString(2).equals("picture")){
 					result.add(new Picture(rs.getInt(1), rs.getString(3), rs.getString(4), rs.getString(5)));
 				}
@@ -354,7 +349,6 @@ public class MySQLUtil {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Gruman we");
 			e.printStackTrace();
 		} finally {
 			closeDBConnection(conn);
@@ -383,7 +377,6 @@ public class MySQLUtil {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Gruman we");
 			e.printStackTrace();
 		} finally {
 			closeDBConnection(conn);
@@ -411,7 +404,6 @@ public class MySQLUtil {
 			result=rs.getInt(1);
 
 		} catch (Exception e) {
-			System.out.println("Gruman we");
 			e.printStackTrace();
 		} finally {
 			closeDBConnection(conn);
@@ -439,7 +431,6 @@ public class MySQLUtil {
 			result=rs.getInt(1);
 
 		} catch (Exception e) {
-			System.out.println("Gruman we");
 			e.printStackTrace();
 		} finally {
 			closeDBConnection(conn);
@@ -465,7 +456,6 @@ public class MySQLUtil {
 			st.executeUpdate();
 
 		} catch (Exception e) {
-			System.out.println("Gruman we");
 			e.printStackTrace();
 		} finally {
 			closeDBConnection(conn);
@@ -535,7 +525,6 @@ public class MySQLUtil {
 			
 			ResultSet rs = st.executeQuery();
 			while(rs.next()){
-				System.out.println(rs.getString(1));
 				result.add(new User(rs.getString(1), rs.getString(2),
 							rs.getInt(3), rs.getString(4), rs.getString(5)));
 			}
